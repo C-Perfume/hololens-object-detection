@@ -112,8 +112,11 @@ public class SceneOrganiser : MonoBehaviour
                     // At this point it will not consider depth
                     newLabel.transform.parent = quad.transform;
                     newProbaLabel.transform.parent = quad.transform;
-                    newLabel.transform.localPosition = CalculateBoundingBoxPosition(quadBounds, prediction.boundingBox);
-                    newProbaLabel.transform.localPosition = CalculateBoundingBoxPosition(quadBounds, prediction.boundingBox);
+
+                    Debug.Log(quadBounds.size);
+                   // Star: prediction have no bounding box so null error poped up
+                   // newLabel.transform.localPosition = CalculateBoundingBoxPosition(quadBounds, prediction.boundingBox);
+                   // newProbaLabel.transform.localPosition = CalculateBoundingBoxPosition(quadBounds, prediction.boundingBox);
 
                     // Cast a ray from the user's head to the currently placed label, it should hit the object detected by the Service.
                     // At that point it will reposition the label where the ray HL sensor collides with the object,

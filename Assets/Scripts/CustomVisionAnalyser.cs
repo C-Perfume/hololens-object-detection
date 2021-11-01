@@ -15,12 +15,12 @@ public class CustomVisionAnalyser : MonoBehaviour
     /// <summary>
     /// Insert your prediction key here
     /// </summary>
-    private string predictionKey = "YOUR PREDICTION KEY";
+    private string predictionKey = "ae6256ef10eb48bf8f9b9211f817934a";
 
     /// <summary>
     /// Insert your prediction endpoint here
     /// </summary>
-    private string predictionEndpoint = "YOUR PREDICTION ENDPOINT";
+    private string predictionEndpoint = "https://hanseultest-prediction.cognitiveservices.azure.com/customvision/v3.0/Prediction/0b653d22-3923-4887-8496-c5b703d90d79/classify/iterations/Iteration1/image";
 
     /// <summary>
     /// Bite array of the image to submit for analysis
