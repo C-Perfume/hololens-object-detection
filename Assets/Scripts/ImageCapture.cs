@@ -3,9 +3,11 @@ using System.IO;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.XR.WSA.Input;
-using UnityEngine.XR.WSA.WebCam;
+using UnityEngine.Windows.WebCam;
 
-public class ImageCapture : MonoBehaviour
+namespace UnityEngine.Satbyul
+{
+        public class ImageCapture : MonoBehaviour
 {
 
     /// <summary>
@@ -41,6 +43,8 @@ public class ImageCapture : MonoBehaviour
     /// <summary>
     /// Called on initialization
     /// </summary>
+    /// 
+   
     private void Awake()
     {
         Instance = this;
@@ -62,7 +66,7 @@ public class ImageCapture : MonoBehaviour
             }
             catch (Exception)
             {
-                Debug.LogFormat("Cannot delete file: ", file.Name);
+                Logger.Log("Cannot delete file: " + file.Name);
             }
         }
 
@@ -73,11 +77,6 @@ public class ImageCapture : MonoBehaviour
         recognizer.StartCapturingGestures();
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
 
     /// <summary>
     /// Respond to Tap Input.
@@ -88,7 +87,7 @@ public class ImageCapture : MonoBehaviour
         {
             captureIsActive = true;
 
-            Debug.Log("Capture Started");
+            Logger.Log("Capture Started");
 
             // Set the cursor color to red
             SceneOrganiser.Instance.cursor.GetComponent<Renderer>().material.color = Color.red;
@@ -105,8 +104,8 @@ public class ImageCapture : MonoBehaviour
     {
         // Create a label in world space using the ResultsLabel class 
         // Invisible at this point but correctly positioned where the image was taken
-        SceneOrganiser.Instance.StartAnalysisLabel();
-        Debug.Log("Execute Image Capture and Analysis");
+        SceneOrganiser.Instance.PlaceAnalysisLabel();
+
         // Set the camera resolution to be the highest possible
         Resolution cameraResolution = PhotoCapture.SupportedResolutions.OrderByDescending
             ((res) => res.width * res.height).First();
@@ -131,7 +130,7 @@ public class ImageCapture : MonoBehaviour
                 string filename = string.Format(@"CapturedImage{0}.jpg", captureCount);
                 filePath = Path.Combine(Application.persistentDataPath, filename);
                 captureCount++;
-                photoCaptureObject.TakePhotoAsync(filePath, PhotoCaptureFileOutputFormat.JPG, OnCapturedPhotoToDisk);
+                photoCaptureObject.TakePhotoAsync(filePath,PhotoCaptureFileOutputFormat.JPG, OnCapturedPhotoToDisk);
             });
         });
     }
@@ -139,16 +138,17 @@ public class ImageCapture : MonoBehaviour
     /// <summary>
     /// Register the full execution of the Photo Capture. 
     /// </summary>
-    void OnCapturedPhotoToDisk(PhotoCapture.PhotoCaptureResult result)
+    void OnCapturedPhotoToDisk(UnityEngine.Windows.WebCam.PhotoCapture.PhotoCaptureResult result)
     {
         try
         {
             // Call StopPhotoMode once the image has successfully captured
             photoCaptureObject.StopPhotoModeAsync(OnStoppedPhotoMode);
-        }
+            
+            }
         catch (Exception e)
         {
-            Debug.LogFormat("Exception capturing photo to disk: {0}", e.Message);
+            Logger.Log($"Exception capturing photo to disk: {0}, {e.Message}");
         }
     }
 
@@ -156,9 +156,9 @@ public class ImageCapture : MonoBehaviour
     /// The camera photo mode has stopped after the capture.
     /// Begin the image analysis process.
     /// </summary>
-    void OnStoppedPhotoMode(PhotoCapture.PhotoCaptureResult result)
+    void OnStoppedPhotoMode(UnityEngine.Windows.WebCam.PhotoCapture.PhotoCaptureResult result)
     {
-        Debug.LogFormat("Stopped Photo Mode");
+        Logger.Log("Stopped Photo Mode");
 
         // Dispose from the object in memory and request the image analysis 
         photoCaptureObject.Dispose();
@@ -181,4 +181,6 @@ public class ImageCapture : MonoBehaviour
         // Stop the capture loop if active
         CancelInvoke();
     }
+}
+
 }

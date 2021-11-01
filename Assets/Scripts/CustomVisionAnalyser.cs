@@ -4,7 +4,9 @@ using System.IO;
 using UnityEngine;
 using UnityEngine.Networking;
 
-public class CustomVisionAnalyser : MonoBehaviour
+namespace UnityEngine.Satbyul
+{ 
+    public class CustomVisionAnalyser : MonoBehaviour
 {
 
     /// <summary>
@@ -15,12 +17,12 @@ public class CustomVisionAnalyser : MonoBehaviour
     /// <summary>
     /// Insert your prediction key here
     /// </summary>
-    private string predictionKey = "YOUR PREDICTION KEY";
+    private string predictionKey = "ae6256ef10eb48bf8f9b9211f817934a";
 
     /// <summary>
     /// Insert your prediction endpoint here
     /// </summary>
-    private string predictionEndpoint = "YOUR PREDICTION ENDPOINT";
+    private string predictionEndpoint = "https://hanseultest-prediction.cognitiveservices.azure.com/customvision/v3.0/Prediction/0b653d22-3923-4887-8496-c5b703d90d79/classify/iterations/Iteration1/image";
 
     /// <summary>
     /// Bite array of the image to submit for analysis
@@ -30,6 +32,8 @@ public class CustomVisionAnalyser : MonoBehaviour
     /// <summary>
     /// Initializes this class
     /// </summary>
+    /// 
+
     private void Awake()
     {
         // Allows this instance to behave like a singleton
@@ -41,14 +45,14 @@ public class CustomVisionAnalyser : MonoBehaviour
     /// </summary>
     public IEnumerator AnalyseLastImageCaptured(string imagePath)
     {
-        Debug.Log("Analyzing...");
+        Logger.Log("Analyzing...");
 
         WWWForm webForm = new WWWForm();
 
         using (UnityWebRequest unityWebRequest = UnityWebRequest.Post(predictionEndpoint, webForm))
         {
-            // Gets a byte array out of the saved image
-            imageBytes = GetImageAsByteArray(imagePath);
+                // Gets a byte array out of the saved image
+                imageBytes = GetImageAsByteArray(imagePath);
 
             unityWebRequest.SetRequestHeader("Content-Type", "application/octet-stream");
             unityWebRequest.SetRequestHeader("Prediction-Key", predictionKey);
@@ -65,7 +69,7 @@ public class CustomVisionAnalyser : MonoBehaviour
 
             string jsonResponse = unityWebRequest.downloadHandler.text;
 
-            Debug.Log("response: " + jsonResponse);
+                Logger.Log("response: " + jsonResponse);
 
             // Create a texture. Texture size does not matter, since
             // LoadImage will replace with the incoming image size.
@@ -76,9 +80,10 @@ public class CustomVisionAnalyser : MonoBehaviour
             // The response will be in JSON format, therefore it needs to be deserialized
             AnalysisRootObject analysisRootObject = new AnalysisRootObject();
             analysisRootObject = JsonConvert.DeserializeObject<AnalysisRootObject>(jsonResponse);
+                Logger.Log("texture done");
 
-             SceneOrganiser.Instance.PlaceLabels(analysisRootObject);
-        }
+             SceneOrganiser.Instance.FinaliseLabel(analysisRootObject);
+            }
     }
 
     /// <summary>
@@ -92,4 +97,6 @@ public class CustomVisionAnalyser : MonoBehaviour
 
         return binaryReader.ReadBytes((int)fileStream.Length);
     }
+}
+
 }

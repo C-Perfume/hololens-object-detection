@@ -13,6 +13,7 @@ using UnityEngine.Networking;
 /// <summary>
 /// Web request object for image data
 /// </summary>
+/// 
 class MultipartObject : IMultipartFormSection
 {
     public string sectionName { get; set; }

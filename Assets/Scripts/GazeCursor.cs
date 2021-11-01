@@ -1,15 +1,19 @@
 ﻿using UnityEngine;
 
-public class GazeCursor : MonoBehaviour
+namespace UnityEngine.Satbyul
+{
+    public class GazeCursor : MonoBehaviour
 {
     /// <summary>
     /// The cursor (this object) mesh renderer
     /// </summary>
     private MeshRenderer meshRenderer;
 
+    public Transform loggertxt;
     /// <summary>
     /// Runs at initialization right after the Awake method
     /// </summary>
+
     void Start()
     {
         // Grab the mesh renderer that is on the same object as this script.
@@ -41,6 +45,9 @@ public class GazeCursor : MonoBehaviour
             transform.position = gazeHitInfo.point;
             // Rotate the cursor to hug the surface of the hologram.
             transform.rotation = Quaternion.FromToRotation(Vector3.up, gazeHitInfo.normal);
+            
+            loggertxt.position = gazeHitInfo.point;
+            loggertxt.forward = -gazeDirection;
         }
         else
         {
@@ -48,4 +55,5 @@ public class GazeCursor : MonoBehaviour
             meshRenderer.enabled = false;
         }
     }
+}
 }
