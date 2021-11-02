@@ -29,7 +29,7 @@ namespace UnityEngine.Satbyul
     /// Current threshold accepted for displaying the label
     /// Reduce this value to display the recognition more often
     /// </summary>
-    internal float probabilityThreshold = 0.5f;
+    internal float probabilityThreshold = 0.4f;
 
     /// <summary>
     /// The quad object hosting the imposed image captured
@@ -108,7 +108,7 @@ namespace UnityEngine.Satbyul
                 Prediction bestPrediction = new Prediction();
                 bestPrediction = sortedPredictions[sortedPredictions.Count - 1];
 
-                Logger.Log($"sort {bestPrediction.tagName} probability");
+                //Logger.Log($"sort {bestPrediction.tagName}");
 
                 if (bestPrediction.probability > probabilityThreshold)
                 {
@@ -126,7 +126,7 @@ namespace UnityEngine.Satbyul
                     // Cast a ray from the user's head to the currently placed label, it should hit the object detected by the Service.
                     // At that point it will reposition the label where the ray HL sensor collides with the object,
                     // (using the HL spatial tracking)
-                    Logger.Log("Repositioning Label");
+                    // Logger.Log("Repositioning Label");
 
                     Vector3 headPosition = Camera.main.transform.position;
                     RaycastHit objHitInfo;
@@ -152,15 +152,15 @@ namespace UnityEngine.Satbyul
         /// </summary>
         public Vector3 CalculateBoundingBoxPosition(Bounds b, BoundingBox boundingBox)
     {
-        Logger.Log($"BB: left {boundingBox.left}, top {boundingBox.top}, width {boundingBox.width}, height {boundingBox.height}");
+        //Logger.Log($"BB: left {boundingBox.left}, top {boundingBox.top}, width {boundingBox.width}, height {boundingBox.height}");
 
         double centerFromLeft = boundingBox.left + (boundingBox.width / 2);
         double centerFromTop = boundingBox.top + (boundingBox.height / 2);
-            Logger.Log($"BB CenterFromLeft {centerFromLeft}, CenterFromTop {centerFromTop}");
+          //  Logger.Log($"BB CenterFromLeft {centerFromLeft}, CenterFromTop {centerFromTop}");
 
         double quadWidth = b.size.normalized.x;
         double quadHeight = b.size.normalized.y;
-            Logger.Log($"Quad Width {b.size.normalized.x}, Quad Height {b.size.normalized.y}");
+          //  Logger.Log($"Quad Width {b.size.normalized.x}, Quad Height {b.size.normalized.y}");
 
         double normalisedPos_X = (quadWidth * centerFromLeft) - (quadWidth / 2);
         double normalisedPos_Y = (quadHeight * centerFromTop) - (quadHeight / 2);
