@@ -1,4 +1,4 @@
-﻿//using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -8,39 +8,13 @@ using UnityEngine.Networking;
 
 namespace UnityEngine.Satbyul
 {
-    public class AnalysisRootObject
-    {
-        public string id { get; set; }
-        public string project { get; set; }
-        public string iteration { get; set; }
-        public DateTime created { get; set; }
-        public List<Prediction> predictions { get; set; }
-        public string tagType { get; set; }
-    }
-
-    public class BoundingBox
-    {
-        public double left { get; set; }
-        public double top { get; set; }
-        public double width { get; set; }
-        public double height { get; set; }
-    }
-
-    public class Prediction
-    {
-        public double probability { get; set; }
-        public string tagId { get; set; }
-        public string tagName { get; set; }
-        public BoundingBox boundingBox { get; set; }
-    }
-
-    public class test
-    {
-        public int num;
-        public int idx;
-        public string name;
-        public int pw;
-    }
+      //public class test
+    //{
+    //    public int num;
+    //    public int idx;
+    //    public string name;
+    //    public int pw;
+    //}
 
     public class CustomVisionAnalyser : MonoBehaviour
     {
@@ -73,25 +47,26 @@ namespace UnityEngine.Satbyul
             Instance = this;
         }
 
-        void Start()
-        {
-            test a = new test();
-            a.num = 1;
-            a.idx = 2;
-            a.name = "test";
-            a.pw = 1234;
+        //void Start()
+        //{
+        //    test a = new test();
+        //    a.num = 1;
+        //    a.idx = 2;
+        //    a.name = "test";
+        //    a.pw = 1234;
 
-            string atxt = JsonUtility.ToJson(a);
-            Logger.Log($"a = {atxt}");
+        //    string atxt = JsonUtility.ToJson(a);
+        //    Logger.Log($"a = {atxt}");
 
-            test b = new test();
-            b = JsonUtility.FromJson<test>(atxt);
-            Logger.Log($"b = {b.num}, {b.idx}, {b.name}, {b.pw}");
-        }
+        //    test b = new test();
+        //    b = JsonUtility.FromJson<test>(atxt);
+        //    Logger.Log($"b = {b.num}, {b.idx}, {b.name}, {b.pw}");
+        //}
 
         /// <summary>
         /// Call the Computer Vision Service to submit the image.
         /// </summary>
+        /// 
         public IEnumerator AnalyseLastImageCaptured(string imagePath)
         {
             WWWForm webForm = new WWWForm();
@@ -128,11 +103,11 @@ namespace UnityEngine.Satbyul
 
                 // The response will be in JSON format, therefore it needs to be deserialized
                 AnalysisRootObject analysisRootObject = new AnalysisRootObject();
-                //analysisRootObject = JsonConvert.DeserializeObject<AnalysisRootObject>(jsonResponse);
-                analysisRootObject = JsonUtility.FromJson<AnalysisRootObject>(jsonResponse);
-                Logger.Log(analysisRootObject.tagType);
+                analysisRootObject = JsonConvert.DeserializeObject<AnalysisRootObject>(jsonResponse);
+                //analysisRootObject = JsonUtility.FromJson<AnalysisRootObject>(jsonResponse);
+                Logger.Log(analysisRootObject.predictions[0].tagName);
               
-                //SceneOrganiser.Instance.FinaliseLabel(analysisRootObject);
+                SceneOrganiser.Instance.FinaliseLabel(analysisRootObject);
             }
         }
 

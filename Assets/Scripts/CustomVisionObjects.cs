@@ -111,32 +111,33 @@ namespace UnityEngine.Satbyul
     /// after submitting an image for analysis
     /// Includes Bounding Box
     /// </summary>
-    
-    //public class AnalysisRootObject
-    //{
-    //    public string id { get; set; }
-    //    public string project { get; set; }
-    //    public string iteration { get; set; }
-    //    public DateTime created { get; set; }
-    //    public List<Prediction> predictions { get; set; }
-    //    public string tagType { get; set; }
-    //}
 
-    //public class BoundingBox
-    //{
-    //    public double left { get; set; }
-    //    public double top { get; set; }
-    //    public double width { get; set; }
-    //    public double height { get; set; }
-    //}
+    public class AnalysisRootObject
+    {
+        public string id { get; set; }
+        public string project { get; set; }
+        public string iteration { get; set; }
+        public DateTime created { get; set; }
+        public List<Prediction> predictions { get; set; }
+      
+    }
 
-    //public class Prediction
-    //{
-    //    public double probability { get; set; }
-    //    public string tagId { get; set; }
-    //    public string tagName { get; set; }
-    //    public BoundingBox boundingBox { get; set; }
-    //}
+    public class BoundingBox
+    {
+        public double left { get; set; }
+        public double top { get; set; }
+        public double width { get; set; }
+        public double height { get; set; }
+    }
+
+    public class Prediction
+    {
+        public double probability { get; set; }
+        public string tagId { get; set; }
+        public string tagName { get; set; }
+        public BoundingBox boundingBox { get; set; }
+        public string tagType { get; set; }
+    }
 
     #endregion
 
