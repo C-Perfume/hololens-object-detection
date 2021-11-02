@@ -9,7 +9,6 @@ namespace UnityEngine.Satbyul
     /// </summary>
     private MeshRenderer meshRenderer;
 
-    public Transform loggertxt;
     /// <summary>
     /// Runs at initialization right after the Awake method
     /// </summary>
@@ -46,8 +45,6 @@ namespace UnityEngine.Satbyul
             // Rotate the cursor to hug the surface of the hologram.
             transform.rotation = Quaternion.FromToRotation(Vector3.up, gazeHitInfo.normal);
             
-            loggertxt.position = gazeHitInfo.point;
-            loggertxt.forward = -gazeDirection;
         }
         else
         {

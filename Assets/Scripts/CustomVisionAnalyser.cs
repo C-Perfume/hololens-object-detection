@@ -1,14 +1,49 @@
-﻿using Newtonsoft.Json;
+﻿//using Newtonsoft.Json;
+using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
 using UnityEngine.Networking;
 
 namespace UnityEngine.Satbyul
 {
+    public class AnalysisRootObject
+    {
+        public string id { get; set; }
+        public string project { get; set; }
+        public string iteration { get; set; }
+        public DateTime created { get; set; }
+        public List<Prediction> predictions { get; set; }
+        public string tagType { get; set; }
+    }
+
+    public class BoundingBox
+    {
+        public double left { get; set; }
+        public double top { get; set; }
+        public double width { get; set; }
+        public double height { get; set; }
+    }
+
+    public class Prediction
+    {
+        public double probability { get; set; }
+        public string tagId { get; set; }
+        public string tagName { get; set; }
+        public BoundingBox boundingBox { get; set; }
+    }
+
+    public class test
+    {
+        public int num;
+        public int idx;
+        public string name;
+        public int pw;
+    }
+
     public class CustomVisionAnalyser : MonoBehaviour
     {
-
         /// <summary>
         /// Unique instance of this class
         /// </summary>
@@ -22,7 +57,7 @@ namespace UnityEngine.Satbyul
         /// <summary>
         /// Insert your prediction endpoint here
         /// </summary>
-        private string predictionEndpoint = "https://sblee1-prediction.cognitiveservices.azure.com/customvision/v3.1/Prediction/1e48f432-7a20-4e29-8bfa-cadfac02a8b4/detect/iterations/Iteration2/image";
+        private string predictionEndpoint = "https://sblee1-prediction.cognitiveservices.azure.com/customvision/v3.1/Prediction/1e48f432-7a20-4e29-8bfa-cadfac02a8b4/detect/iterations/Iteration1/image";
         /// <summary>
         /// Bite array of the image to submit for analysis
         /// </summary>
@@ -32,11 +67,26 @@ namespace UnityEngine.Satbyul
         /// Initializes this class
         /// </summary>
         /// 
-
         private void Awake()
         {
             // Allows this instance to behave like a singleton
             Instance = this;
+        }
+
+        void Start()
+        {
+            test a = new test();
+            a.num = 1;
+            a.idx = 2;
+            a.name = "test";
+            a.pw = 1234;
+
+            string atxt = JsonUtility.ToJson(a);
+            Logger.Log($"a = {atxt}");
+
+            test b = new test();
+            b = JsonUtility.FromJson<test>(atxt);
+            Logger.Log($"b = {b.num}, {b.idx}, {b.name}, {b.pw}");
         }
 
         /// <summary>
@@ -44,8 +94,6 @@ namespace UnityEngine.Satbyul
         /// </summary>
         public IEnumerator AnalyseLastImageCaptured(string imagePath)
         {
-            Logger.Log("Analyzing...");
-
             WWWForm webForm = new WWWForm();
 
             using (UnityWebRequest unityWebRequest = UnityWebRequest.Post(predictionEndpoint, webForm))
@@ -74,15 +122,17 @@ namespace UnityEngine.Satbyul
                 tex.LoadImage(imageBytes);
                 SceneOrganiser.Instance.quadRenderer.material.SetTexture("_MainTex", tex);
 
-                // The response will be in JSON format, therefore it needs to be deserialized
-                AnalysisRootObject analysisRootObject = new AnalysisRootObject();
-                analysisRootObject = JsonConvert.DeserializeObject<AnalysisRootObject>(jsonResponse);
-
                 int preidx = jsonResponse.IndexOf("predictions");
                 int regularidx = jsonResponse.IndexOf("Regular");
-                Logger.Log($"P{jsonResponse}".Substring(preidx + 1, regularidx - preidx).Replace(",", "\n"));
+                Logger.Log($"P{jsonResponse}".Substring(preidx + 1, regularidx+8 - preidx).Replace(",", "\n"));
 
-                SceneOrganiser.Instance.FinaliseLabel(analysisRootObject);
+                // The response will be in JSON format, therefore it needs to be deserialized
+                AnalysisRootObject analysisRootObject = new AnalysisRootObject();
+                //analysisRootObject = JsonConvert.DeserializeObject<AnalysisRootObject>(jsonResponse);
+                analysisRootObject = JsonUtility.FromJson<AnalysisRootObject>(jsonResponse);
+                Logger.Log(analysisRootObject.tagType);
+              
+                //SceneOrganiser.Instance.FinaliseLabel(analysisRootObject);
             }
         }
 

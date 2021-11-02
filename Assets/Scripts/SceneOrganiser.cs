@@ -29,7 +29,7 @@ namespace UnityEngine.Satbyul
     /// Current threshold accepted for displaying the label
     /// Reduce this value to display the recognition more often
     /// </summary>
-    internal float probabilityThreshold = 0.8f;
+    internal float probabilityThreshold = 0.6f;
 
     /// <summary>
     /// The quad object hosting the imposed image captured
@@ -57,7 +57,6 @@ namespace UnityEngine.Satbyul
         // Add the CustomVisionAnalyser class to this Gameobject
       gameObject.AddComponent<CustomVisionAnalyser>();
       
-
         // Add the CustomVisionObjects class to this Gameobject
       gameObject.AddComponent<CustomVisionObjects>();
     }
@@ -136,6 +135,10 @@ namespace UnityEngine.Satbyul
                         lastLabelPlaced.position = objHitInfo.point;
                     }
                 }
+            }
+            else 
+            {
+                Logger.Log(analysisObject.ToString());
             }
 
         // Reset the color of the cursor
