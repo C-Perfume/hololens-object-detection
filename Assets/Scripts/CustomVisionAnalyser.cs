@@ -99,14 +99,15 @@ namespace UnityEngine.Satbyul
 
                 int preidx = jsonResponse.IndexOf("predictions");
                 int regularidx = jsonResponse.IndexOf("Regular");
-                Logger.Log($"P{jsonResponse}".Substring(preidx + 1, regularidx+8 - preidx).Replace(",", "\n"));
+                Logger.Log($"{jsonResponse}".Substring(preidx-1, regularidx+10 - preidx).Replace(",", "\n"));
 
-                // The response will be in JSON format, therefore it needs to be deserialized
-                AnalysisRootObject analysisRootObject = new AnalysisRootObject();
-                analysisRootObject = JsonConvert.DeserializeObject<AnalysisRootObject>(jsonResponse);
-                //analysisRootObject = JsonUtility.FromJson<AnalysisRootObject>(jsonResponse);
-                Logger.Log(analysisRootObject.predictions[0].tagName);
-              
+                //AnalysisRootObject analysisRootObject = JsonConvert.DeserializeObject<AnalysisRootObject>(jsonResponse);
+                AnalysisRootObject analysisRootObject = JsonUtility.FromJson<AnalysisRootObject>(jsonResponse);
+                Logger.Log($"{analysisRootObject.predictions[0].tagName}");
+                
+                List<Prediction> pre = analysisRootObject.predictions;
+                Logger.Log($"{pre.Count}");
+
                 SceneOrganiser.Instance.FinaliseLabel(analysisRootObject);
             }
         }

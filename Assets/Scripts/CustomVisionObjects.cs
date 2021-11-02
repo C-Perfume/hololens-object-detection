@@ -119,7 +119,6 @@ namespace UnityEngine.Satbyul
         public string iteration { get; set; }
         public DateTime created { get; set; }
         public List<Prediction> predictions { get; set; }
-      
     }
 
     public class BoundingBox
