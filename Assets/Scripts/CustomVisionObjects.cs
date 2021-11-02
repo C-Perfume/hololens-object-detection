@@ -116,6 +116,8 @@ public class AnalysisRootObject
     public string iteration { get; set; }
     public DateTime created { get; set; }
     public List<Prediction> predictions { get; set; }
+
+    public string tagType { get; set; }
 }
 
 public class BoundingBox

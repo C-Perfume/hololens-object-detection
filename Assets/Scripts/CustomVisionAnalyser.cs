@@ -22,7 +22,7 @@ namespace UnityEngine.Satbyul
         /// <summary>
         /// Insert your prediction endpoint here
         /// </summary>
-        private string predictionEndpoint = "https://sblee1-prediction.cognitiveservices.azure.com/customvision/v3.1/Prediction/1e48f432-7a20-4e29-8bfa-cadfac02a8b4/detect/iterations/Iteration1/image";
+        private string predictionEndpoint = "https://sblee1-prediction.cognitiveservices.azure.com/customvision/v3.1/Prediction/1e48f432-7a20-4e29-8bfa-cadfac02a8b4/detect/iterations/Iteration2/image";
         /// <summary>
         /// Bite array of the image to submit for analysis
         /// </summary>
@@ -77,6 +77,10 @@ namespace UnityEngine.Satbyul
                 // The response will be in JSON format, therefore it needs to be deserialized
                 AnalysisRootObject analysisRootObject = new AnalysisRootObject();
                 analysisRootObject = JsonConvert.DeserializeObject<AnalysisRootObject>(jsonResponse);
+
+                int preidx = jsonResponse.IndexOf("predictions");
+                int regularidx = jsonResponse.IndexOf("Regular");
+                Logger.Log($"P{jsonResponse}".Substring(preidx + 1, regularidx - preidx).Replace(",", "\n"));
 
                 SceneOrganiser.Instance.FinaliseLabel(analysisRootObject);
             }
