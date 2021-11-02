@@ -29,7 +29,7 @@ namespace UnityEngine.Satbyul
     /// Current threshold accepted for displaying the label
     /// Reduce this value to display the recognition more often
     /// </summary>
-    internal float probabilityThreshold = 0.4f;
+    internal float probabilityThreshold = 0.8f;
 
     /// <summary>
     /// The quad object hosting the imposed image captured
@@ -108,7 +108,7 @@ namespace UnityEngine.Satbyul
                 Prediction bestPrediction = new Prediction();
                 bestPrediction = sortedPredictions[sortedPredictions.Count - 1];
 
-                //Logger.Log($"sort {bestPrediction.tagName}");
+                Logger.Log($"sort {bestPrediction.tagName}");
 
                 if (bestPrediction.probability > probabilityThreshold)
                 {

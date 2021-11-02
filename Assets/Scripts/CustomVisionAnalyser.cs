@@ -22,7 +22,7 @@ namespace UnityEngine.Satbyul
         /// <summary>
         /// Insert your prediction endpoint here
         /// </summary>
-        private string predictionEndpoint = "https://sblee1-prediction.cognitiveservices.azure.com/customvision/v3.1/Prediction/1e48f432-7a20-4e29-8bfa-cadfac02a8b4/detect/iterations/Iteration1/image";
+        private string predictionEndpoint = "https://sblee1-prediction.cognitiveservices.azure.com/customvision/v3.1/Prediction/1e48f432-7a20-4e29-8bfa-cadfac02a8b4/detect/iterations/Iteration2/image";
         /// <summary>
         /// Bite array of the image to submit for analysis
         /// </summary>
@@ -44,7 +44,6 @@ namespace UnityEngine.Satbyul
         /// </summary>
         public IEnumerator AnalyseLastImageCaptured(string imagePath)
         {
-            Logger.Log("Analyzing...");
 
             WWWForm webForm = new WWWForm();
 
@@ -67,6 +66,9 @@ namespace UnityEngine.Satbyul
                 yield return unityWebRequest.SendWebRequest();
 
                 string jsonResponse = unityWebRequest.downloadHandler.text;
+                int preidx = jsonResponse.IndexOf("predictions");
+                int regularidx = jsonResponse.IndexOf("Regular");
+                Logger.Log($"P{jsonResponse}".Substring(preidx + 1, regularidx).Replace(",", "\n"));
 
                 // Create a texture. Texture size does not matter, since
                 // LoadImage will replace with the incoming image size.
@@ -79,6 +81,7 @@ namespace UnityEngine.Satbyul
                 analysisRootObject = JsonConvert.DeserializeObject<AnalysisRootObject>(jsonResponse);
 
                 SceneOrganiser.Instance.FinaliseLabel(analysisRootObject);
+
             }
         }
 
