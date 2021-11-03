@@ -1,4 +1,4 @@
-﻿using Newtonsoft.Json;
+﻿//using Newtonsoft.Json;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -8,13 +8,44 @@ using UnityEngine.Networking;
 
 namespace UnityEngine.Satbyul
 {
-      //public class test
+    #region JSON test
+    public class Analy<Pre>
+    {
+        public string id; 
+        public string project;
+        public string iteration;
+        public string created;
+        List<Pre> predictions;
+        public List<Pre> ToPre() { return predictions; }
+        public Analy(List<Pre> predictions) { this.predictions = predictions; }
+    }
+
+    public class Pre
+    {
+        public double probability;
+        public string tagId;
+        public string tagName;
+        public BBox boundingBox;
+        public string tagType;
+    }
+
+    public class BBox
+    {
+        public double left;
+        public double top;
+        public double width;
+        public double height;
+    }
+
+    //public class test
     //{
     //    public int num;
     //    public int idx;
     //    public string name;
     //    public int pw;
     //}
+
+    #endregion
 
     public class CustomVisionAnalyser : MonoBehaviour
     {
@@ -37,15 +68,48 @@ namespace UnityEngine.Satbyul
         /// </summary>
         [HideInInspector] public byte[] imageBytes;
 
-        /// <summary>
-        /// Initializes this class
-        /// </summary>
-        /// 
-        private void Awake()
-        {
-            // Allows this instance to behave like a singleton
-            Instance = this;
-        }
+        #region JSON test methods
+        List<Pre> pres = new List<Pre>();
+        //int cnt = 0;
+        //public void ShowJson()
+        //{
+        //    var filename = string.Format(@"JSON{0}.txt", cnt);
+        //    var filePath = Path.Combine(Application.persistentDataPath, filename);
+
+        //    Analy a = new Analy();
+        //    string json = ReadJson(filePath);
+        //    if (json != "nothing")
+        //    {
+        //        a = JsonUtility.FromJson<Analy>(json);
+        //        Logger.Log("id = " + a.id);
+        //    }
+        //    else
+        //    {
+        //        Logger.Log(json);
+        //    }
+        //    //SceneOrganiser.Instance.FinaliseLabel(test);
+        //}
+
+        //void WriteText(string json, string path)
+        //{
+        //    if (File.Exists(path)) File.Delete(path);
+        //    File.WriteAllText(path, json);
+        //    cnt++;
+        //}
+
+        //string ReadJson(string filePath)
+        //{
+        //    string json = "nothing";
+
+        //    if (File.Exists(filePath))
+        //    {
+        //        StreamReader reader = new StreamReader(filePath);
+        //        json = reader.ReadToEnd();
+        //        reader.Close();
+        //    }
+
+        //    return json;
+        //}
 
         //void Start()
         //{
@@ -62,6 +126,14 @@ namespace UnityEngine.Satbyul
         //    b = JsonUtility.FromJson<test>(atxt);
         //    Logger.Log($"b = {b.num}, {b.idx}, {b.name}, {b.pw}");
         //}
+
+        #endregion
+
+        private void Awake()
+        {
+            // Allows this instance to behave like a singleton
+            Instance = this;
+        }
 
         /// <summary>
         /// Call the Computer Vision Service to submit the image.
@@ -97,18 +169,18 @@ namespace UnityEngine.Satbyul
                 tex.LoadImage(imageBytes);
                 SceneOrganiser.Instance.quadRenderer.material.SetTexture("_MainTex", tex);
 
-                int preidx = jsonResponse.IndexOf("predictions");
-                int regularidx = jsonResponse.IndexOf("Regular");
-                Logger.Log($"{jsonResponse}".Substring(preidx-1, regularidx+10 - preidx).Replace(",", "\n"));
+                //int preidx = jsonResponse.IndexOf("predictions");
+                //int regularidx = jsonResponse.IndexOf("Regular");
+                //Logger.Log($"{jsonResponse}".Substring(preidx - 1, regularidx + 10 - preidx).Replace(",", "\n"));
 
                 //AnalysisRootObject analysisRootObject = JsonConvert.DeserializeObject<AnalysisRootObject>(jsonResponse);
-                AnalysisRootObject analysisRootObject = JsonUtility.FromJson<AnalysisRootObject>(jsonResponse);
-                Logger.Log($"{analysisRootObject.predictions[0].tagName}");
-                
-                List<Prediction> pre = analysisRootObject.predictions;
-                Logger.Log($"{pre.Count}");
 
-                SceneOrganiser.Instance.FinaliseLabel(analysisRootObject);
+                Analy<Pre> ana = JsonUtility.FromJson<Analy<Pre>>(jsonResponse);
+                pres = ana.ToPre();
+                if (pres.Count >= 0) Logger.Log($"Pre_Cnt = {pres.Count}");
+                else Logger.Log("smaller tnan 0");
+
+                //SceneOrganiser.Instance.FinaliseLabel(analysisRootObject);
             }
         }
 

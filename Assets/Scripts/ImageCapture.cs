@@ -55,22 +55,22 @@ namespace UnityEngine.Satbyul
     /// </summary>
     void Start()
     {
-        // Clean up the LocalState folder of this application from all photos stored
-        DirectoryInfo info = new DirectoryInfo(Application.persistentDataPath);
-        var fileInfo = info.GetFiles();
-        foreach (var file in fileInfo)
-        {
-            try
+            // Clean up the LocalState folder of this application from all photos stored
+            DirectoryInfo info = new DirectoryInfo(Application.persistentDataPath);
+            var fileInfo = info.GetFiles();
+            foreach (var file in fileInfo)
             {
-                file.Delete();
+                try
+                {
+                    file.Delete();
+                }
+                catch (Exception)
+                {
+                    Logger.Log("Cannot delete file: " + file.Name);
+                }
             }
-            catch (Exception)
-            {
-                Logger.Log("Cannot delete file: " + file.Name);
-            }
-        }
 
-        // Subscribing to the Microsoft HoloLens API gesture recognizer to track user gestures
+            // Subscribing to the Microsoft HoloLens API gesture recognizer to track user gestures
         recognizer = new GestureRecognizer();
         recognizer.SetRecognizableGestures(GestureSettings.Tap);
         recognizer.Tapped += TapHandler;
@@ -164,8 +164,10 @@ namespace UnityEngine.Satbyul
         photoCaptureObject.Dispose();
         photoCaptureObject = null;
 
-        // Call the image analysis
-        StartCoroutine(CustomVisionAnalyser.Instance.AnalyseLastImageCaptured(filePath));
+            // Call the image analysis
+             StartCoroutine(CustomVisionAnalyser.Instance.AnalyseLastImageCaptured(filePath));
+
+           // CustomVisionAnalyser.Instance.ShowJson();
     }
 
     /// <summary>

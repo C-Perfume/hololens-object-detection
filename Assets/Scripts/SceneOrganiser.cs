@@ -58,7 +58,7 @@ namespace UnityEngine.Satbyul
       gameObject.AddComponent<CustomVisionAnalyser>();
       
         // Add the CustomVisionObjects class to this Gameobject
-      gameObject.AddComponent<CustomVisionObjects>();
+      //gameObject.AddComponent<CustomVisionObjects>();
     }
 
 
@@ -95,16 +95,18 @@ namespace UnityEngine.Satbyul
             quad.transform.parent = null;
         }
 
-
-    public void FinaliseLabel(AnalysisRootObject analysisObject)
+        //Star
+        // changed AnalysisRootObject analysisObject to List<Pre> pres
+        // changed  List<Prediction> to Pre
+        public void FinaliseLabel(List<Pre> pres)
     {
-            if (analysisObject.predictions != null)
+            if (pres != null)
             {
                 lastLabelPlacedText = lastLabelPlaced.GetComponent<TextMesh>();
                 // Sort the predictions to locate the highest one
-                List<Prediction> sortedPredictions = new List<Prediction>();
-                sortedPredictions = analysisObject.predictions.OrderBy(p => p.probability).ToList();
-                Prediction bestPrediction = new Prediction();
+                List<Pre> sortedPredictions = new List<Pre>();
+                sortedPredictions = pres.OrderBy(p => p.probability).ToList();
+                Pre bestPrediction = new Pre();
                 bestPrediction = sortedPredictions[sortedPredictions.Count - 1];
 
                 Logger.Log($"sort {bestPrediction.tagName}");
@@ -138,7 +140,7 @@ namespace UnityEngine.Satbyul
             }
             else 
             {
-                Logger.Log(analysisObject.ToString());
+                Logger.Log("list pres = null");
             }
 
         // Reset the color of the cursor
@@ -148,27 +150,21 @@ namespace UnityEngine.Satbyul
         ImageCapture.Instance.ResetImageCapture();
     }
 
-        /// <summary>
-        /// This method hosts a series of calculations to determine the position 
-        /// of the Bounding Box on the quad created in the real world
-        /// by using the Bounding Box received back alongside the Best Prediction
-        /// </summary>
-        public Vector3 CalculateBoundingBoxPosition(Bounds b, BoundingBox boundingBox)
+        //Star
+        //Changed BoundingBox to BBox
+        public Vector3 CalculateBoundingBoxPosition(Bounds b, BBox boundingBox)
     {
-        //Logger.Log($"BB: left {boundingBox.left}, top {boundingBox.top}, width {boundingBox.width}, height {boundingBox.height}");
-
         double centerFromLeft = boundingBox.left + (boundingBox.width / 2);
         double centerFromTop = boundingBox.top + (boundingBox.height / 2);
-          //  Logger.Log($"BB CenterFromLeft {centerFromLeft}, CenterFromTop {centerFromTop}");
-
         double quadWidth = b.size.normalized.x;
         double quadHeight = b.size.normalized.y;
-          //  Logger.Log($"Quad Width {b.size.normalized.x}, Quad Height {b.size.normalized.y}");
-
         double normalisedPos_X = (quadWidth * centerFromLeft) - (quadWidth / 2);
         double normalisedPos_Y = (quadHeight * centerFromTop) - (quadHeight / 2);
 
-        return new Vector3((float)normalisedPos_X, (float)normalisedPos_Y, 0);
+            Vector3 boxPos = new Vector3((float)normalisedPos_X, (float)normalisedPos_Y, 0);
+            Logger.Log($"BBox Position = {boxPos}");
+
+        return boxPos;
     }
 }
 
