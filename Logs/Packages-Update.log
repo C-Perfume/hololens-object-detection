@@ -37,3 +37,12 @@ The following packages were updated:
   com.unity.xr.windowsmr.metro from version 1.0.8 to 4.2.1
 The following packages were removed:
   com.unity.package-manager-ui@2.0.3
+
+=== Thu Nov  4 00:55:21 2021
+
+Packages were changed.
+Update Mode: updateDependencies
+
+The following packages were updated:
+  com.unity.collab-proxy from version 1.10.2 to 1.12.5
+  com.unity.purchasing from version 3.2.2 to 4.0.3
