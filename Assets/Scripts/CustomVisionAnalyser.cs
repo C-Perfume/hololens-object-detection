@@ -70,7 +70,7 @@ namespace UnityEngine.Satbyul
                 tex.LoadImage(imageBytes);
                 SceneOrganiser.Instance.quadRenderer.material.SetTexture("_MainTex", tex);
 
-                int preidx = jsonResponse.IndexOf("predictions");
+                int preidx = jsonResponse.IndexOf("predic");
                 int regularidx = jsonResponse.IndexOf("Regular");
                 Logger.Log($"{jsonResponse}".Substring(preidx - 1, regularidx + 10 - preidx).Replace(",", "\n"));
 

@@ -109,17 +109,22 @@ namespace UnityEngine.Satbyul
                 Prediction bestPrediction = new Prediction();
                 bestPrediction = sortedPredictions[sortedPredictions.Count - 1];
 
-                Logger.Log($"sort {bestPrediction.tagName}");
+                Logger.Log($"item = {bestPrediction.tagName}, {bestPrediction.probability.ToString().Substring(0,4)}");
+
 
                 if (bestPrediction.probability > probabilityThreshold)
                 {
                     quadRenderer = quad.GetComponent<Renderer>() as Renderer;
                     Bounds quadBounds = quadRenderer.bounds;
 
+                    BoundingBox bestBox = bestPrediction.boundingBox;
+
+                    Logger.Log($"bbox = {bestBox.height}, {bestBox.left}, {bestBox.top}, {bestBox.width}");
+                
                     // Position the label as close as possible to the Bounding Box of the prediction 
                     // At this point it will not consider depth
                     lastLabelPlaced.transform.parent = quad.transform;
-                    lastLabelPlaced.transform.localPosition = CalculateBoundingBoxPosition(quadBounds, bestPrediction.boundingBox);
+                    lastLabelPlaced.transform.localPosition = CalculateBoundingBoxPosition(quadBounds, bestBox);
 
                     // Set the tag text
                     lastLabelPlacedText.text = bestPrediction.tagName;
@@ -137,10 +142,6 @@ namespace UnityEngine.Satbyul
                         lastLabelPlaced.position = objHitInfo.point;
                     }
                 }
-            }
-            else 
-            {
-                Logger.Log("null");
             }
 
         // Reset the color of the cursor
@@ -162,7 +163,7 @@ namespace UnityEngine.Satbyul
         double normalisedPos_Y = (quadHeight * centerFromTop) - (quadHeight / 2);
 
             Vector3 boxPos = new Vector3((float)normalisedPos_X, (float)normalisedPos_Y, 0);
-            Logger.Log($"BBox Position = {boxPos}");
+            Logger.Log($"BBoxPos = {boxPos}");
 
         return boxPos;
     }

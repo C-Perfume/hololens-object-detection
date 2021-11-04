@@ -166,8 +166,6 @@ namespace UnityEngine.Satbyul
 
             // Call the image analysis
              StartCoroutine(CustomVisionAnalyser.Instance.AnalyseLastImageCaptured(filePath));
-
-           // CustomVisionAnalyser.Instance.ShowJson();
     }
 
     /// <summary>
