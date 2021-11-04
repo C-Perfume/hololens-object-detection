@@ -58,7 +58,7 @@ namespace UnityEngine.Satbyul
       gameObject.AddComponent<CustomVisionAnalyser>();
       
         // Add the CustomVisionObjects class to this Gameobject
-      //gameObject.AddComponent<CustomVisionObjects>();
+      gameObject.AddComponent<CustomVisionObjects>();
     }
 
 
@@ -98,15 +98,15 @@ namespace UnityEngine.Satbyul
         //Star
         // changed AnalysisRootObject analysisObject to List<Pre> pres
         // changed  List<Prediction> to Pre
-        public void FinaliseLabel(List<Pre> pres)
+        public void FinaliseLabel(AnalysisRootObject analysisObject)
     {
-            if (pres != null)
+            if (analysisObject.predictions != null)
             {
                 lastLabelPlacedText = lastLabelPlaced.GetComponent<TextMesh>();
                 // Sort the predictions to locate the highest one
-                List<Pre> sortedPredictions = new List<Pre>();
-                sortedPredictions = pres.OrderBy(p => p.probability).ToList();
-                Pre bestPrediction = new Pre();
+                List<Prediction> sortedPredictions = new List<Prediction>();
+                sortedPredictions = analysisObject.predictions.OrderBy(p => p.probability).ToList();
+                Prediction bestPrediction = new Prediction();
                 bestPrediction = sortedPredictions[sortedPredictions.Count - 1];
 
                 Logger.Log($"sort {bestPrediction.tagName}");
@@ -140,7 +140,7 @@ namespace UnityEngine.Satbyul
             }
             else 
             {
-                Logger.Log("list pres = null");
+                Logger.Log("null");
             }
 
         // Reset the color of the cursor
@@ -152,7 +152,7 @@ namespace UnityEngine.Satbyul
 
         //Star
         //Changed BoundingBox to BBox
-        public Vector3 CalculateBoundingBoxPosition(Bounds b, BBox boundingBox)
+        public Vector3 CalculateBoundingBoxPosition(Bounds b, BoundingBox boundingBox)
     {
         double centerFromLeft = boundingBox.left + (boundingBox.width / 2);
         double centerFromTop = boundingBox.top + (boundingBox.height / 2);
