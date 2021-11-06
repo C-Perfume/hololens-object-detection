@@ -74,7 +74,7 @@ PluginImporter:
       settings:
         CPU: AnyCPU
         DontProcess: false
-        PlaceholderPath: Assets/Plugins/Newtonsoft/Newtonsoft.Json.dll
+        PlaceholderPath: 
         SDK: AnySDK
         ScriptingBackend: AnyScriptingBackend
   userData: 
