@@ -23,7 +23,7 @@ namespace UnityEngine.Satbyul
         /// <summary>
         /// Insert your prediction endpoint here
         /// </summary>
-        private string predictionEndpoint = "https://sblee1-prediction.cognitiveservices.azure.com/customvision/v3.1/Prediction/e66ddd6f-b852-46d9-b74f-0e8b7ab82417/classify/iterations/Indoors/image";
+        private string predictionEndpoint = "https://sblee1-prediction.cognitiveservices.azure.com/customvision/v3.1/Prediction/1e48f432-7a20-4e29-8bfa-cadfac02a8b4/detect/iterations/5items/image";
         /// <summary>
         /// Bite array of the image to submit for analysis
         /// </summary>
@@ -70,9 +70,9 @@ namespace UnityEngine.Satbyul
                 tex.LoadImage(imageBytes);
                 SceneOrganiser.Instance.quadRenderer.material.SetTexture("_MainTex", tex);
 
-                int preidx = jsonResponse.IndexOf("predic");
-                int regularidx = jsonResponse.IndexOf("Regular");
-                Logger.Log($"{jsonResponse}".Substring(preidx - 1, regularidx + 10 - preidx).Replace(",", "\n"));
+                //int preidx = jsonResponse.IndexOf("predic");
+                //int regularidx = jsonResponse.IndexOf("Regular");
+                //Logger.Log($"{jsonResponse}".Substring(preidx - 1, regularidx + 10 - preidx).Replace(",", "\n"));
 
                 AnalysisRootObject analysisRootObject = JsonConvert.DeserializeObject<AnalysisRootObject>(jsonResponse);
 
